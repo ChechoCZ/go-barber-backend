@@ -37,7 +37,7 @@ class AppointmentController {
     const checkAvailability = await Appointment.findOne({
       where: {
         provider_id,
-        cancelled_at: null,
+        canceled_at: null,
         date: hourStart
       }
     });
