@@ -9,6 +9,7 @@ import SessionController from './app/controllers/SessionController';
 import ProviderController from './app/controllers/ProviderController';
 import AppointmentController from './app/controllers/AppointmentController';
 import ScheduleController from './app/controllers/ScheduleController';
+import NotificationController from './app/controllers/NotificationController';
 
 import authMiddleware from './app/middlewares/auth'; 
 
@@ -25,6 +26,10 @@ routes.get('/providers', ProviderController.index);
  
 routes.get('/appointments', AppointmentController.index);
 routes.post('/appointments', AppointmentController.store);
+routes.delete('/appointments/:id', AppointmentController.destroy);
+
+routes.get('/notifications', NotificationController.index);
+routes.put('/notifications/:id', NotificationController.update);
 
 routes.get('/schedule', ScheduleController.index);
 
