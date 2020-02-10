@@ -4,9 +4,10 @@ import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
+import CancelationMail from '../jobs/CancelationMail';
 
 import Notification from '../schemas/Notification';
-import Mail from '../../lib/Mail';
+import Queue from '../../lib/Queue';
 
 class AppointmentController {
   async index(req, res) {
@@ -129,17 +130,10 @@ class AppointmentController {
 
     await appointment.save();
 
-    await Mail.sendMail({
-      to: `${appointment.provider.name} <${appointment.provider.email}>`,
-      subject: 'Appointment Canceled',
-      template: 'cancelation',
-      context: {
-        provider: appointment.provider.name,
-        user: appointment.user.name,
-        date: format(appointment.date, "MMMM dd', at' H:mm")
-      }
+    await Queue.add(CancelationMail.key, {
+      appointment
     });
-    
+
     return res.json(appointment);
   }
 }
